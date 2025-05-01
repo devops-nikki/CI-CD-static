@@ -1,4 +1,4 @@
-name: Deploy Static Site to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -8,13 +8,20 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-  
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
 
-        -name: Deploy to github pages
-         uses: peaceiris/actions-gh-pages@v3
-        with: 
-          github_token: ${{secrets.GITHUB_TOKEN}}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy index.html to deployment directory
+        run: |
+          mkdir deploy
+          cp index.html deploy/
+
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
+          publish_branch: gh-pages
            publish_dir:./
